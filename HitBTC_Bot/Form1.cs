@@ -38,5 +38,48 @@ namespace HitBTC_Bot
             
 
         }
+
+        private void btnGetSymbolnfo_Click(object sender, EventArgs e)
+        {
+            var url = string.Format("https://api.hitbtc.com/api/2/public/symbol/{0}", tbSymbolInfo.Text);
+
+            using (var syncClient = new WebClient())
+            {
+                var testInfo = syncClient.DownloadString(url);
+
+                List<SymbolResponse> LSR = new List<SymbolResponse>();
+
+                var result = JsonConvert.DeserializeObject<SymbolResponse>(testInfo);
+
+                LSR.Add(result);
+
+                dataGridView2.DataSource = LSR;
+
+
+            }
+
+
+            var url2 = string.Format("https://api.hitbtc.com/api/2/public/ticker/{0}", tbSymbolInfo.Text);
+
+            using (var syncClient = new WebClient())
+            {
+                var testInfo = syncClient.DownloadString(url2);
+
+                List<CoinInfoResponse> CIR = new List<CoinInfoResponse>();
+
+                var result = JsonConvert.DeserializeObject<CoinInfoResponse>(testInfo);
+
+                tbHighPrice.Text = result.high.ToString();
+
+                CIR.Add(result);
+
+                dgvCoinInfo.DataSource = CIR;
+
+
+            }
+
+            
+
+        }
     }
 }
